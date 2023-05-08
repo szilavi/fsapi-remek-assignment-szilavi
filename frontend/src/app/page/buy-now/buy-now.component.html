@@ -1,0 +1,169 @@
+<div *ngIf="product$ | async as product" class="tui-window">
+  <fieldset class="tui-fieldset">
+    <legend class="right title mb-5">
+      Buy
+      {{ product["title"] }}!
+    </legend>
+    <p>PRICE: ${{ product.price }}</p>
+    <p>Details:</p>
+    <form #buyingForm="ngForm" (ngSubmit)="onSubmit(product)">
+      <div class="row">
+        <div class="col-md-6">
+          <div [hidden]="true" class="form-group">
+            <label for="price" class="d-block">Price:</label>
+            <div class="input-group mb-3">
+              <span class="input-group-text">$</span>
+              <input
+                [(ngModel)]="product['price']"
+                id="price"
+                type="text"
+                class="form-control tui-input disabled price-input"
+                name="price"
+                readonly
+              />
+            </div>
+          </div>
+
+          <h3>Shop Details</h3>
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input
+              [(ngModel)]="product['title']"
+              id="title"
+              type="text"
+              class="form-control tui-input disabled"
+              name="title"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="shopName">Shop</label>
+            <input
+              [(ngModel)]="product['name']"
+              id="shopName"
+              type="text"
+              class="form-control tui-input disabled"
+              name="shopName"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="shopEmail">Email</label>
+            <input
+              [(ngModel)]="product['email']"
+              id="shopEmail"
+              type="text"
+              class="form-control tui-input disabled"
+              name="shopEmail"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="shopPhone">Phone</label>
+            <input
+              [(ngModel)]="product['phone']"
+              id="shopPhone"
+              type="text"
+              class="form-control tui-input disabled"
+              name="shopPhone"
+              readonly
+            />
+          </div>
+          <div class="form-group">
+            <label for="shopAddress">Address</label>
+            <textarea
+              id="shopAddress"
+              type="textarea"
+              class="form-control tui-input disabled"
+              name="shopAddress"
+              readonly
+              [value]="
+                product['address'].street +
+                ', ' +
+                product['address'].city +
+                ', ' +
+                product['address'].country +
+                ', ' +
+                product['address'].zip
+              "
+            ></textarea>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h3>User Details</h3>
+          <div *ngIf="user$ | async as user">
+            <!-- User details -->
+            <div class="form-group">
+              <label for="userName">Name</label>
+              <input
+                [(ngModel)]="user['name']"
+                id="userName"
+                type="text"
+                class="form-control tui-input disabled"
+                name="userName"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label for="userEmail">Email</label>
+              <input
+                [(ngModel)]="user['email']"
+                id="userEmail"
+                type="text"
+                class="form-control tui-input disabled"
+                name="userEmail"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label for="userPhone">Phone</label>
+              <input
+                [(ngModel)]="user['phone']"
+                id="userPhone"
+                type="text"
+                class="form-control tui-input disabled"
+                name="userPhone"
+                readonly
+              />
+            </div>
+            <div class="form-group">
+              <label for="userAddress">Address</label>
+              <textarea
+                id="userAddress"
+                type="textarea"
+                class="form-control tui-input disabled"
+                name="userAddress"
+                readonly
+                [value]="
+                  user.address.street +
+                  ', ' +
+                  user.address.city +
+                  ', ' +
+                  user.address.country +
+                  ', ' +
+                  user.address.zip
+                "
+              ></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cardData">Card Data (dummy)</label>
+            <input
+              [(ngModel)]="cardData"
+              id="cardData"
+              type="text"
+              class="form-control tui-input"
+              name="cardData"
+              required
+            />
+          </div>
+        </div>
+      </div>
+      <div class="d-grid gap-2 col-sm-7 col-lg-5 col-xxl-3 mx-5 right">
+        <button type="submit" class="tui-button red-255 white-text my-4 mx-5">
+          BUY NOW !
+        </button>
+      </div>
+    </form>
+  </fieldset>
+</div>

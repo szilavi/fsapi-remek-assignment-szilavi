@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-5">
+    <h2>Wishlist</h2>
+    <app-table
+      [dataService]="wishListService"
+      [dataCols]="config.wishCols"
+      serviceMethod="adminGetAll"
+      [secondButton]="false"
+    ></app-table>
+  </div>
+  <div class="col-7">
+    <h2>Offers</h2>
+    <app-table
+      [dataService]="productService"
+      [dataCols]="config.offerCols"
+      serviceMethod="adminGetAll"
+    ></app-table>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "szilaviremek",
+    "public": "dist/remek",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

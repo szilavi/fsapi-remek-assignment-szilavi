@@ -1,0 +1,23 @@
+<div *ngIf="product$ | async as product" class="tui-window w-100">
+  <fieldset class="tui-fieldset">
+    <legend class="right title mb-5">{{ product["title"] }}</legend>
+
+    <p><span class="inform">Description:</span> {{ product["description"] }}</p>
+    <p>
+      <span class="inform">Price:</span>
+      {{ product["price"] | symbol : "price" }}
+    </p>
+    <p class="condition red-255" *ngIf="product['condition']">
+      <span class="inform">Condition:</span> {{ product["condition"] }}
+    </p>
+    <div class="d-grid gap-2 col-sm-7 col-lg-5 col-xxl-3 mx-5 right">
+      <button
+        type="button"
+        class="tui-button red-255 white-text my-4 mx-5"
+        (click)="buyNow()"
+      >
+        BUY NOW!
+      </button>
+    </div>
+  </fieldset>
+</div>

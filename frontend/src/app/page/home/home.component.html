@@ -1,0 +1,27 @@
+<div class="tui-window">
+  <fieldset class="tui-fieldset">
+    <legend class="center">Sell and buy retro games !</legend>
+    <p>Welcome!</p>
+    <p>
+      Is your favorite DOS game missing from your shelf? Would you like to get
+      your hands on an original copy of your all-time favorite?
+    </p>
+    <p>You've come to the right place!</p>
+    <p>Sign up and browse through our constantly updating collection.</p>
+    <p>
+      But if you're looking to get rid of your own games, you're still in the
+      right place! Add your own list of dusty disks from home and we'll take
+      them off your hands if we find a buyer.
+    </p>
+    <div class="d-grid gap-2 col-4 mx-auto">
+      <button
+        type="button"
+        class="tui-button blue-255 white-text my-4"
+        routerLink="/login"
+        *ngIf="!user"
+      >
+        Log in / Sign up
+      </button>
+    </div>
+  </fieldset>
+</div>

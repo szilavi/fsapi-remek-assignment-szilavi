@@ -1,0 +1,275 @@
+<div *ngIf="user$ | async as user" class="tui-window w-100">
+  <fieldset class="tui-fieldset">
+    <legend class="right title mb-5">{{ user["name"] }}</legend>
+    <form [formGroup]="userForm" (ngSubmit)="updateUserData()">
+      <div class="row w-100">
+        <div class="col">
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input
+              id="email"
+              type="email"
+              class="form-control tui-input"
+              formControlName="email"
+              placeholder="e.g. example@example.com"
+            />
+            <div
+              *ngIf="
+                userForm.get('email')?.invalid &&
+                (userForm.get('email')?.dirty || userForm.get('email')?.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="userForm.get('email')?.errors?.['required']">
+                E-mail is required
+              </div>
+              <div *ngIf="userForm.get('email')?.errors?.['email']">
+                Invalid e-mail format
+              </div>
+            </div>
+          </div>
+          <div *ngIf="role === 1 || IamAnAdmin" class="form-group">
+            <label for="newPassword">Chane Password (not required)</label>
+            <input
+              id="newPassword"
+              type="password"
+              class="form-control tui-input"
+              formControlName="newPassword"
+              placeholder="8+ chars, 2+ UC, 2+ nums!"
+            />
+            <div
+              *ngIf="
+                userForm.get('newPassword')?.invalid &&
+                (userForm.get('newPassword')?.dirty ||
+                  userForm.get('newPassword')?.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="userForm.get('newPassword')?.errors?.['minlength']">
+                Password must be at least 8 characters long
+              </div>
+              <div *ngIf="userForm.get('newPassword')?.errors?.['pattern']">
+                Invalid password format
+              </div>
+            </div>
+          </div>
+          <div *ngIf="role === 1 || IamAnAdmin" class="form-group">
+            <label for="repeatNewPassword">Repeat Password</label>
+            <input
+              id="repeatNewPassword"
+              type="password"
+              class="form-control tui-input"
+              formControlName="repeatNewPassword"
+            />
+            <div
+              *ngIf="
+                userForm.get('repeatNewPassword')?.invalid &&
+                (userForm.get('repeatNewPassword')?.dirty ||
+                  userForm.get('repeatNewPassword')?.touched)
+              "
+              class="text-danger"
+            >
+              <div
+                *ngIf="userForm.get('repeatNewPassword')?.errors?.['passwordMismatch'] && (userForm.get('password')?.touched || userForm.get('repeatNewPassword')?.touched)"
+                class="text-danger"
+              >
+                Passwords do not match
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              type="text"
+              class="form-control tui-input"
+              formControlName="name"
+              placeholder="e.g. John"
+            />
+            <div
+              *ngIf="
+                userForm.get('name')?.invalid &&
+                (userForm.get('name')?.dirty || userForm.get('name')?.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="userForm.get('name')?.errors?.['required']">
+                Name is required
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone number</label>
+            <input
+              id="phone"
+              type="number"
+              class="form-control tui-input"
+              formControlName="phone"
+              placeholder="e.g. 06001234567"
+            />
+            <div
+              *ngIf="
+                userForm.get('phone')?.invalid &&
+                (userForm.get('phone')?.dirty || userForm.get('phone')?.touched)
+              "
+              class="text-danger"
+            >
+              <div *ngIf="userForm.get('phone')?.errors?.['required']">
+                Phone number is required
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row">
+            <div class="form-group">
+              <label for="street">Street</label>
+              <input
+                id="street"
+                type="text"
+                class="form-control tui-input"
+                formControlName="street"
+                placeholder="e.g. Main Street 123"
+              />
+              <div
+                *ngIf="
+                  userForm.get('street')?.invalid &&
+                  (userForm.get('street')?.dirty ||
+                    userForm.get('street')?.touched)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="userForm.get('street')?.errors?.['required']">
+                  Street is required
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="city">City</label>
+              <input
+                id="city"
+                type="text"
+                class="form-control tui-input"
+                formControlName="city"
+                placeholder="e.g. Budapest"
+              />
+              <div
+                *ngIf="
+                  userForm.get('city')?.invalid &&
+                  (userForm.get('city')?.dirty || userForm.get('city')?.touched)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="userForm.get('city')?.errors?.['required']">
+                  City is required
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="country">Country</label>
+              <input
+                id="country"
+                type="text"
+                class="form-control tui-input"
+                formControlName="country"
+                placeholder="e.g. Hungary"
+              />
+              <div
+                *ngIf="
+                  userForm.get('country')?.invalid &&
+                  (userForm.get('country')?.dirty ||
+                    userForm.get('country')?.touched)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="userForm.get('country')?.errors?.['required']">
+                  Country is required
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="zip">Zip code</label>
+              <input
+                id="zip"
+                type="number"
+                class="form-control tui-input"
+                formControlName="zip"
+                placeholder="e.g. 4000"
+              />
+              <div
+                *ngIf="
+                  userForm.get('zip')?.invalid &&
+                  (userForm.get('zip')?.dirty || userForm.get('zip')?.touched)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="userForm.get('zip')?.errors?.['required']">
+                  Zip code is required
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="role === 1 || IamAnAdmin"
+        class="form-group gap-2 col-md-6 mx-auto"
+      >
+        <label for="loginPassword">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          class="form-control tui-input"
+          formControlName="password"
+        />
+        <div
+          *ngIf="
+            userForm.get('password')?.invalid &&
+            (userForm.get('password')?.dirty ||
+              userForm.get('password')?.touched)
+          "
+          class="text-danger"
+        >
+          <div *ngIf="userForm.get('password')?.errors?.['required']">
+            Password is required
+          </div>
+        </div>
+      </div>
+      <fieldset
+        class="tui-input-fieldset center my-2"
+        [ngClass]="{
+          'red-255': info && info !== 'Registration successful!',
+          'green-255': info === 'Changes saved'
+        }"
+        *ngIf="info"
+      >
+        {{ info }}
+      </fieldset>
+      <div class="d-grid gap-2 col-md-4 mx-auto">
+        <button
+          *ngIf="(!updateSuccess && role === 1) || IamAnAdmin"
+          type="submit"
+          class="tui-button orange-255 white-text my-4"
+        >
+          Editing user data
+        </button>
+        <button
+          *ngIf="!updateSuccess && role === 3"
+          type="button"
+          class="tui-button red-255 white-text my-4"
+          (click)="onDeleteUser()"
+        >
+          Delete
+        </button>
+
+        <button
+          class="tui-button green-255 white-text my-4"
+          *ngIf="updateSuccess"
+          routerLink="/admin/user-editor"
+        >
+          Close this window!
+        </button>
+      </div>
+    </form>
+  </fieldset>
+</div>

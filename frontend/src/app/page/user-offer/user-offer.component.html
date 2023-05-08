@@ -1,0 +1,253 @@
+<div class="col-12">
+  <div class="tui-window my-5">
+    <fieldset class="tui-fieldset">
+      <p *ngIf="userRole === 1" class="center">
+        Do you have an offer for us? Fill out the form and if we think your
+        offer is interesting, we will notify you by email. Use the search
+        function to find the game you want to sell to us, then write a short
+        description of its condition and make an offer. If you can't find the
+        game in our collection, fill in its important details!
+      </p>
+      <p *ngIf="userRole === 3" class="center">You can sell games here.</p>
+    </fieldset>
+  </div>
+
+  <form [formGroup]="form" class="form-inline mb-3">
+    <div class="form-group mr-2">
+      <input
+        type="text"
+        class="form-control tui-input"
+        formControlName="search"
+        placeholder="Search..."
+      />
+    </div>
+  </form>
+
+  <div class="accordion accordion-flush" id="gameAccordion">
+    <ng-container *ngFor="let game of searchResult$ | async; let i = index">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#collapse' + i"
+            [attr.aria-expanded]="'false'"
+            [attr.aria-controls]="'collapse' + i"
+          >
+            {{ game.title }}
+          </button>
+        </h2>
+        <div
+          [attr.id]="'collapse' + i"
+          class="accordion-collapse collapse"
+          data-bs-parent="#gameAccordion"
+        >
+          <div class="accordion-body text-white">
+            <form [formGroup]="offerForm" (ngSubmit)="submitOffer(game)">
+              <p [hidden]="true">
+                Release Date: <small>{{ game.releaseDate }}</small>
+              </p>
+              <p>
+                Description: <small>{{ game.description }}</small>
+              </p>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="tui-window yellow-255">
+                    <legend class="text-black">Condition (not required)</legend>
+                    <textarea
+                      class="tui-textarea text-black w-100"
+                      rows="4"
+                      placeholder="Leave a comment here"
+                      formControlName="condition"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <label for="price" class="w-100"
+                      >Price (not required)</label
+                    >
+                    <span class="input-group-text tui-input">$</span>
+                    <input
+                      id="price"
+                      type="number"
+                      class="form-control tui-input"
+                      aria-label="Amount (to the nearest dollar)"
+                      formControlName="price"
+                    />
+                    <span class="input-group-text tui-input">.00</span>
+                  </div>
+                </div>
+              </div>
+              <fieldset
+                class="tui-input-fieldset center my-2"
+                [ngClass]="{
+                  'green-255': info === 'You made an offer!',
+                  'red-255': info !== 'You made an offer!'
+                }"
+                *ngIf="info"
+              >
+                {{ info }}
+              </fieldset>
+              <div class="d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="tui-button orange-255 white-text my-4"
+                  *ngIf="!info"
+                >
+                  Take offer!
+                </button>
+                <button
+                  type="button"
+                  class="tui-button green-255 white-text my-4"
+                  *ngIf="info"
+                  routerLink="/store"
+                >
+                  Close this window!
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="searchResult$ | async">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button yellow-255"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#collapseNewAccordion'"
+            [attr.aria-expanded]="'false'"
+            [attr.aria-controls]="'collapseNewAccordion'"
+          >
+            I want to add a new game!
+          </button>
+        </h2>
+        <div
+          id="collapseNewAccordion"
+          class="accordion-collapse collapse"
+          data-bs-parent="#gameAccordion"
+        >
+          <div class="accordion-body text-white">
+            <form [formGroup]="newGameOffer" (ngSubmit)="submitNewOffer()">
+              <div class="form-group">
+                <label for="title">Title</label>
+                <input
+                  type="text"
+                  class="form-control tui-input"
+                  id="title"
+                  formControlName="title"
+                  placeholder="Enter game title"
+                  required
+                />
+              </div>
+
+              <div class="row my-5">
+                <div class="col-lg-6">
+                  <div class="tui-window yellow-255">
+                    <legend class="text-black">Condition (not required)</legend>
+                    <textarea
+                      class="tui-textarea text-black w-100"
+                      rows="4"
+                      placeholder="Leave a comment here"
+                      formControlName="condition"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group">
+                    <label for="price" class="w-100"
+                      >Price (not required)</label
+                    >
+                    <span class="input-group-text tui-input">$</span>
+                    <input
+                      id="price"
+                      type="number"
+                      class="form-control tui-input"
+                      aria-label="Amount (to the nearest dollar)"
+                      formControlName="price"
+                    />
+                    <span class="input-group-text tui-input">.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <fieldset
+                class="tui-input-fieldset center my-2"
+                [ngClass]="{
+                  'green-255': info === 'You made an offer!',
+                  'red-255': info !== 'You made an offer!'
+                }"
+                *ngIf="info"
+              >
+                {{ info }}
+              </fieldset>
+
+              <div class="d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="tui-button orange-255 white-text my-4"
+                  *ngIf="!info"
+                >
+                  Take offer!
+                </button>
+                <button
+                  type="button"
+                  class="tui-button green-255 white-text my-4"
+                  *ngIf="info"
+                  routerLink="/store"
+                >
+                  Close this window!
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <hr class="col-6 my-5 tui-black-divider" />
+</div>
+<!-- ACUTAL OFFERS -->
+<div class="col-12">
+  <h2>Your actual offers</h2>
+  <table
+    *ngIf="offers$ | async as offers"
+    class="tui-table tui-bg-blue-white table table-borderless table-responsive hovered-cyan"
+  >
+    <thead>
+      <tr>
+        <th *ngFor="let col of cols" [hidden]="!col.visible">
+          <span class="left" *ngIf="col.text !== undefined">{{
+            col.text
+          }}</span>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr [style.height.px]="55" *ngFor="let item of offers$ | async">
+        <td *ngFor="let col of cols" [hidden]="!col.visible">
+          <ng-container *ngIf="item[col.key] !== undefined; else notSpecified">
+            <span>{{ item[col.key] | symbol : col.key }}</span>
+          </ng-container>
+          <ng-template #notSpecified>
+            <span>not specified</span>
+          </ng-template>
+        </td>
+        <td class="text-center">
+          <button
+            class="tui-button blue-168 white-text"
+            type="button"
+            (click)="deleteOffer(item['_id'])"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

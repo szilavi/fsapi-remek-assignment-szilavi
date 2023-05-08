@@ -1,0 +1,20 @@
+.navbar {
+  background-color: #ddd;
+  border: 2px solid #000;
+}
+
+button {
+  margin: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+}
+
+.logout-svg {
+  width: 24px;
+  height: 24px;
+  fill: #6c757d;
+}
+
+button:hover .logout-svg {
+  fill: #fff;
+}

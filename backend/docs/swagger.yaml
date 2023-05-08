@@ -1,0 +1,452 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: DOSDepot webshop
+  description: A webshop where users can buy and sell DOS games
+servers:
+  - url: http://localhost:8080
+paths:
+  /store:
+    post:
+      security:
+        - bearerAuth: []
+      description: Creates a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: Product has been created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+  /store/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns a product with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    put:
+      security:
+        - bearerAuth: []
+      description: Updates a product with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Product has been updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+    delete:
+      security:
+        - bearerAuth: []
+      description: Deletes a product with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Product has been deleted successfully
+  /store/game/search:
+    get:
+      security:
+        - bearerAuth: []
+      description: Searches for games with the given title
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of games matching the given title
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Game"
+  /store/user/offers/{userId}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns a list of products offered by the given user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of products offered by the user returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /store/admin:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns a list of all products
+      responses:
+        "200":
+          description: List of products returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+  /user/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns a user with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    put:
+      security:
+        - bearerAuth: []
+      description: Updates a user with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                newPassword:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  $ref: "#/components/schemas/Address"
+      responses:
+        "200":
+          description: User has been updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /user:
+    post:
+      description: Creates a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  $ref: "#/components/schemas/Address"
+      responses:
+        "201":
+          description: User has been created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /user/forgot-password:
+    post:
+      description: Sends a password reminder for the user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        "200":
+          description: Password reminder sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /user/admin:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns all users
+      responses:
+        "200":
+          description: User data returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+  /user/admin/{id}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns a user with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      security:
+        - bearerAuth: []
+      description: Deletes a user with the given ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: User has been deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /wishlist/{userId}:
+    get:
+      security:
+        - bearerAuth: []
+      description: Returns the wishlist of the user with the given ID
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Wishlist data returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WishlistItem"
+        "404":
+          description: No wishlist items found for this user
+    delete:
+      security:
+        - bearerAuth: []
+      description: Delete an item from the wishlist
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Item has been deleted from the wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "404":
+          description: Wish not found
+  /wishlist:
+    post:
+      security:
+        - bearerAuth: []
+      description: Add an item to the wishlist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WishInput"
+      responses:
+        "201":
+          description: Item has been added to the wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /wishlist/admin:
+    get:
+      security:
+        - bearerAuth: []
+      description: Get all wishlist items with user and game details
+      responses:
+        "200":
+          description: All wishlist items returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WishlistItemWithUserAndGame"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Game:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        releaseDate:
+          type: string
+        description:
+          type: string
+
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        gameId:
+          type: string
+        sellerId:
+          type: string
+        status:
+          type: string
+        condition:
+          type: string
+        price:
+          type: number
+
+    RefreshToken:
+      type: object
+      properties:
+        _id:
+          type: string
+        token:
+          type: string
+        userId:
+          type: string
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        role:
+          type: integer
+        password:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        zip:
+          type: integer
+
+    Wish:
+      type: object
+      properties:
+        _id:
+          type: string
+        userId:
+          type: string
+        gameId:
+          type: string

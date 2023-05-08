@@ -1,0 +1,189 @@
+<div class="col-12">
+  <div class="tui-window my-5 orange-255">
+    <fieldset class="tui-fieldset">
+      <p class="center">
+        Is there a game you want but can't find it in the store? Add it to your
+        wishlist, and we'll do our best to get it for you!
+      </p>
+    </fieldset>
+  </div>
+
+  <form [formGroup]="form" class="form-inline mb-3">
+    <div class="form-group mr-2">
+      <input
+        type="text"
+        class="form-control tui-input"
+        formControlName="search"
+        placeholder="Search..."
+      />
+    </div>
+  </form>
+
+  <div class="accordion accordion-flush" id="gameAccordion">
+    <ng-container *ngFor="let game of searchResult$ | async; let i = index">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#collapse' + i"
+            [attr.aria-expanded]="'false'"
+            [attr.aria-controls]="'collapse' + i"
+          >
+            {{ game.title }}
+          </button>
+        </h2>
+        <div
+          [attr.id]="'collapse' + i"
+          class="accordion-collapse collapse"
+          data-bs-parent="#gameAccordion"
+        >
+          <div class="accordion-body text-white">
+            <p>
+              Release Date: <small>{{ game.releaseDate }}</small>
+            </p>
+            <p>
+              Description: <small>{{ game.description }}</small>
+            </p>
+            <fieldset
+              class="tui-input-fieldset center my-2"
+              [ngClass]="{
+                'green-255': info === 'Added to your wislist!',
+                'red-255': info !== 'Added to your wislist!'
+              }"
+              *ngIf="info"
+            >
+              {{ info }}
+            </fieldset>
+            <div class="d-flex justify-content-end">
+              <button
+                type="submit"
+                class="tui-button orange-255 white-text my-4"
+                *ngIf="!info"
+                (click)="submitWish(game)"
+              >
+                Add to my wishlist!
+              </button>
+              <button
+                type="button"
+                class="tui-button green-255 white-text my-4"
+                *ngIf="info"
+                routerLink="/store"
+              >
+                Close this window!
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="searchResult$ | async">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button yellow-255"
+            type="button"
+            data-bs-toggle="collapse"
+            [attr.data-bs-target]="'#collapseNewAccordion'"
+            [attr.aria-expanded]="'false'"
+            [attr.aria-controls]="'collapseNewAccordion'"
+          >
+            I want to add a new game!
+          </button>
+        </h2>
+        <div
+          id="collapseNewAccordion"
+          class="accordion-collapse collapse"
+          data-bs-parent="#gameAccordion"
+        >
+          <div class="accordion-body text-white">
+            <form [formGroup]="newGameWish" (ngSubmit)="submitNewWish()">
+              <div class="form-group">
+                <label for="title">Title</label>
+                <input
+                  type="text"
+                  class="form-control tui-input"
+                  id="title"
+                  formControlName="title"
+                  placeholder="Enter game title"
+                  required
+                />
+              </div>
+
+              <fieldset
+                class="tui-input-fieldset center my-2"
+                [ngClass]="{
+                  'green-255': info === 'Added to your wislist!',
+                  'red-255': info !== 'Added to your wislist!'
+                }"
+                *ngIf="info"
+              >
+                {{ info }}
+              </fieldset>
+
+              <div class="d-flex justify-content-end">
+                <button
+                  type="submit"
+                  class="tui-button orange-255 white-text my-4"
+                  *ngIf="!info"
+                >
+                  Add to wishlist!
+                </button>
+                <button
+                  type="button"
+                  class="tui-button green-255 white-text my-4"
+                  *ngIf="info"
+                  routerLink="/store"
+                >
+                  Close this window!
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <hr class="col-6 my-5 tui-black-divider" />
+</div>
+<!-- ACUTAL OFFERS -->
+<div class="col-12">
+  <h2>Your wishlist</h2>
+  <table
+    *ngIf="wishlist$ | async as offers"
+    class="tui-table tui-bg-blue-white table table-borderless table-responsive hovered-cyan"
+  >
+    <thead>
+      <tr>
+        <th *ngFor="let col of cols" [hidden]="!col.visible">
+          <span class="left" *ngIf="col.text !== undefined">{{
+            col.text
+          }}</span>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr [style.height.px]="55" *ngFor="let item of wishlist$ | async">
+        <td *ngFor="let col of cols" [hidden]="!col.visible">
+          <ng-container *ngIf="item[col.key] !== undefined; else notSpecified">
+            <span>{{ item[col.key] | symbol : col.key }}</span>
+          </ng-container>
+          <ng-template #notSpecified>
+            <span>not specified</span>
+          </ng-template>
+        </td>
+        <td class="text-center">
+          <button
+            class="tui-button blue-168 white-text"
+            type="button"
+            (click)="deleteWish(item['_id'])"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

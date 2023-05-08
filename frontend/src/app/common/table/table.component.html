@@ -1,0 +1,67 @@
+<div class="col-12">
+  <table
+    *ngIf="list$ | async as list; else loading"
+    class="tui-table tui-bg-blue-white table table-borderless table-responsive hovered-cyan"
+  >
+    <thead>
+      <tr>
+        <th *ngFor="let col of cols" [hidden]="!col.visible">
+          <span class="left" *ngIf="col.text !== undefined">{{
+            col.text
+          }}</span>
+        </th>
+        <th *ngIf="secondButton"></th>
+        <th *ngIf="canShowButton"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr [style.height.px]="55" *ngFor="let item of list$ | async">
+        <td *ngFor="let col of cols" [hidden]="!col.visible">
+          <ng-container *ngIf="item[col.key] !== undefined; else notSpecified">
+            <span>{{ item[col.key] | symbol : col.key }}</span>
+          </ng-container>
+          <ng-template #notSpecified>
+            <span>not specified</span>
+          </ng-template>
+        </td>
+        <td class="text-center">
+          <button
+            *ngIf="secondButton && dataService !== userService"
+            class="tui-button tui-modal-button white-text"
+            type="button"
+            [routerLink]="['/more-info', item._id]"
+          >
+            More info
+          </button>
+          <button
+            *ngIf="secondButton && dataService === userService"
+            class="tui-button tui-modal-button white-text"
+            type="button"
+            [routerLink]="['/edit-user', item._id]"
+          >
+            More info
+          </button>
+        </td>
+        <td class="text-center">
+          <button
+            class="tui-button blue-168 white-text"
+            type="button"
+            [routerLink]="['/store/buy-now', item._id]"
+            *ngIf="canShowButton && role !== 3"
+          >
+            Buy Now!
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #loading>
+  <div class="d-flex justify-content-center align-items-center">
+    <div>
+      <img src="../../../assets/images/Msdos-icon.svg.png" alt="loading..." />
+      <h1>Loading{{ loadingDots }}</h1>
+    </div>
+  </div>
+</ng-template>

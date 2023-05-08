@@ -1,0 +1,427 @@
+<!-- LOGIN -->
+
+<div class="col-12 center">
+  <div class="tui-window login w-75">
+    <fieldset class="tui-fieldset">
+      <legend class="h2 right title mb-5">Sign in or Sign up!</legend>
+      <form [formGroup]="loginForm" (ngSubmit)="signIn()">
+        <div class="form-group gap-2 col-md-6 mx-auto">
+          <label for="loginEmail">E-mail</label>
+          <input
+            id="loginEmail"
+            type="email"
+            class="form-control tui-input"
+            formControlName="email"
+          />
+          <div
+            *ngIf="
+              loginForm.get('email')?.invalid &&
+              (loginForm.get('email')?.dirty || loginForm.get('email')?.touched)
+            "
+            class="text-danger"
+          >
+            <div *ngIf="loginForm.get('email')?.errors?.['required']">
+              E-mail is required
+            </div>
+            <div *ngIf="loginForm.get('email')?.errors?.['email']">
+              Invalid e-mail format
+            </div>
+          </div>
+        </div>
+        <div class="form-group gap-2 col-md-6 mx-auto">
+          <label for="loginPassword">Password</label>
+          <input
+            id="loginPassword"
+            type="password"
+            class="form-control tui-input"
+            formControlName="password"
+          />
+          <div
+            *ngIf="
+              loginForm.get('password')?.invalid &&
+              (loginForm.get('password')?.dirty ||
+                loginForm.get('password')?.touched)
+            "
+            class="text-danger"
+          >
+            <div *ngIf="loginForm.get('password')?.errors?.['required']">
+              Password is required
+            </div>
+          </div>
+        </div>
+        <div *ngIf="loginMessage">
+          <span
+            [ngClass]="{
+              errorMessage: loginMessage !== 'Successful login!',
+              loginMessage: loginMessage === 'Successful login!'
+            }"
+            >{{ loginMessage }}</span
+          >
+        </div>
+        <div class="d-grid gap-2 col-md-6 mx-auto">
+          <button type="submit" class="tui-button blue-255 white-text mt-4">
+            Sign In
+          </button>
+          <span
+            class="btn btn-link white-text"
+            data-bs-toggle="modal"
+            data-bs-target="#forgotModal"
+            >Forgot your password?</span
+          >
+
+          <button
+            type="button"
+            class="tui-button orange-255 white-text mb-4"
+            data-bs-toggle="modal"
+            data-bs-target="#registrationModal"
+          >
+            Sign Up
+          </button>
+        </div>
+      </form>
+    </fieldset>
+  </div>
+</div>
+
+<!-- MODAL WINDOW -->
+
+<!-- registraton modal -->
+
+<div class="modal fade" id="registrationModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content tui-window">
+      <fieldset class="tui-fieldset">
+        <legend class="blue-255 yellow-255-text">SIGN UP!</legend>
+        <form [formGroup]="registrationForm" (ngSubmit)="register()">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="registrationEmail">E-mail</label>
+                <input
+                  id="registrationEmail"
+                  type="email"
+                  class="form-control tui-input"
+                  formControlName="email"
+                  placeholder="e.g. example@example.com"
+                />
+                <div
+                  *ngIf="
+                    registrationForm.get('email')?.invalid &&
+                    (registrationForm.get('email')?.dirty ||
+                      registrationForm.get('email')?.touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="registrationForm.get('email')?.errors?.['required']"
+                  >
+                    E-mail is required
+                  </div>
+                  <div *ngIf="registrationForm.get('email')?.errors?.['email']">
+                    Invalid e-mail format
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="registrationPassword">Password</label>
+                <input
+                  id="registrationPassword"
+                  type="password"
+                  class="form-control tui-input registrationpassword"
+                  formControlName="password"
+                  placeholder="8+ chars, 2+ UC, 2+ nums!"
+                />
+                <div
+                  *ngIf="
+                    registrationForm.get('password')?.invalid &&
+                    (registrationForm.get('password')?.dirty ||
+                      registrationForm.get('password')?.touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="registrationForm.get('password')?.errors?.['required']"
+                  >
+                    Password is required
+                  </div>
+                  <div
+                    *ngIf="registrationForm.get('password')?.errors?.['minlength']"
+                  >
+                    Password must be at least 8 characters long
+                  </div>
+                  <div
+                    *ngIf="registrationForm.get('password')?.errors?.['pattern']"
+                  >
+                    Invalid password format
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="repPassword">Repeat Password</label>
+                <input
+                  id="repPassword"
+                  type="password"
+                  class="form-control tui-input"
+                  formControlName="repeatPassword"
+                />
+                <div
+                  *ngIf="
+                    registrationForm.get('repeatPassword')?.invalid &&
+                    (registrationForm.get('repeatPassword')?.dirty ||
+                      registrationForm.get('repeatPassword')?.touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="registrationForm.get('repeatPassword')?.errors?.['passwordMismatch'] && (registrationForm.get('password')?.touched || registrationForm.get('repeatPassword')?.touched)"
+                    class="text-danger"
+                  >
+                    Passwords do not match
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input
+                  id="name"
+                  type="text"
+                  class="form-control tui-input"
+                  formControlName="name"
+                  placeholder="e.g. John"
+                />
+                <div
+                  *ngIf="
+                    registrationForm.get('name')?.invalid &&
+                    (registrationForm.get('name')?.dirty ||
+                      registrationForm.get('name')?.touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="registrationForm.get('name')?.errors?.['required']"
+                  >
+                    Name is required
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone number</label>
+                <input
+                  id="phone"
+                  type="number"
+                  class="form-control tui-input"
+                  formControlName="phone"
+                  placeholder="e.g. 06001234567"
+                />
+                <div
+                  *ngIf="
+                    registrationForm.get('phone')?.invalid &&
+                    (registrationForm.get('phone')?.dirty ||
+                      registrationForm.get('phone')?.touched)
+                  "
+                  class="text-danger"
+                >
+                  <div
+                    *ngIf="registrationForm.get('phone')?.errors?.['required']"
+                  >
+                    Phone number is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="row">
+                <div class="form-group">
+                  <label for="street">Street</label>
+                  <input
+                    id="street"
+                    type="text"
+                    class="form-control tui-input"
+                    formControlName="street"
+                    placeholder="e.g. Main Street 123"
+                  />
+                  <div
+                    *ngIf="
+                      registrationForm.get('street')?.invalid &&
+                      (registrationForm.get('street')?.dirty ||
+                        registrationForm.get('street')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div
+                      *ngIf="registrationForm.get('street')?.errors?.['required']"
+                    >
+                      Street is required
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input
+                    id="city"
+                    type="text"
+                    class="form-control tui-input"
+                    formControlName="city"
+                    placeholder="e.g. Budapest"
+                  />
+                  <div
+                    *ngIf="
+                      registrationForm.get('city')?.invalid &&
+                      (registrationForm.get('city')?.dirty ||
+                        registrationForm.get('city')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div
+                      *ngIf="registrationForm.get('city')?.errors?.['required']"
+                    >
+                      City is required
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="country">Country</label>
+                  <input
+                    id="country"
+                    type="text"
+                    class="form-control tui-input"
+                    formControlName="country"
+                    placeholder="e.g. Hungary"
+                  />
+                  <div
+                    *ngIf="
+                      registrationForm.get('country')?.invalid &&
+                      (registrationForm.get('country')?.dirty ||
+                        registrationForm.get('country')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div
+                      *ngIf="registrationForm.get('country')?.errors?.['required']"
+                    >
+                      Country is required
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="zip">Zip code</label>
+                  <input
+                    id="zip"
+                    type="number"
+                    class="form-control tui-input"
+                    formControlName="zip"
+                    placeholder="e.g. 4000"
+                  />
+                  <div
+                    *ngIf="
+                      registrationForm.get('zip')?.invalid &&
+                      (registrationForm.get('zip')?.dirty ||
+                        registrationForm.get('zip')?.touched)
+                    "
+                    class="text-danger"
+                  >
+                    <div
+                      *ngIf="registrationForm.get('zip')?.errors?.['required']"
+                    >
+                      Zip code is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <fieldset
+            class="tui-input-fieldset d-grid gap-2 col-6 mx-auto center"
+            [ngClass]="{
+              'fieldset-invalid':
+                registrationForm.get('agreeTerms')?.invalid &&
+                (registrationForm.get('agreeTerms')?.dirty ||
+                  registrationForm.get('agreeTerms')?.touched)
+            }"
+          >
+            <label class="tui-checkbox"
+              >I agree Terms & Privacy.
+              <input type="checkbox" formControlName="agreeTerms" />
+              <span></span>
+            </label>
+          </fieldset>
+          <fieldset
+            class="tui-input-fieldset center my-2"
+            [ngClass]="{
+              'red-255': info && info !== 'Registration successful!',
+              'green-255': info === 'Registration successful!'
+            }"
+            *ngIf="info"
+          >
+            {{ info }}
+          </fieldset>
+          <div class="d-grid gap-2 col-md-8 mx-auto">
+            <button
+              *ngIf="!registrationSuccess"
+              type="submit"
+              class="tui-button orange-255 white-text my-4"
+            >
+              Registration
+            </button>
+
+            <button
+              class="tui-button green-255 white-text"
+              *ngIf="registrationSuccess"
+              data-bs-dismiss="modal"
+            >
+              Close this window!
+            </button>
+          </div>
+        </form>
+        <button class="tui-button right" data-bs-dismiss="modal">close</button>
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+<!-- FORGOT PASSWORD -->
+
+<div class="modal fade" id="forgotModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content tui-window">
+      <fieldset class="tui-fieldset">
+        <legend class="blue-255 yellow-255-text">I FORGOT MY PASSWORD</legend>
+        <form [formGroup]="forgotForm" (ngSubmit)="forgotPassword()">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="forgotEmail">E-mail</label>
+                <input
+                  id="forgotEmail"
+                  type="email"
+                  class="form-control tui-input"
+                  formControlName="email"
+                  placeholder="e.g. example@example.com"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="d-grid gap-2 col-md-8 mx-auto">
+            <fieldset
+              class="tui-input-fieldset center my-2"
+              [ngClass]="{
+                'green-255': forgotMessage === 'We sent your new password!'
+              }"
+              *ngIf="forgotMessage"
+            >
+              {{ forgotMessage }}
+            </fieldset>
+            <button
+              [disabled]="!forgotForm.valid"
+              type="submit"
+              class="tui-button orange-255 white-text my-4"
+            >
+              Send a new password!
+            </button>
+          </div>
+        </form>
+        <button class="tui-button right" data-bs-dismiss="modal">close</button>
+      </fieldset>
+    </div>
+  </div>
+</div>

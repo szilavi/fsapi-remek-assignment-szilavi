@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: retroFonts;
+  src: url("./assets/fonts/Px437_DOS-V_TWN19.ttf");
+}
+
+body {
+  background-color: #aaaaaa;
+  font-family: "retroFonts";
+}
